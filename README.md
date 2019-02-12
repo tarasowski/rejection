@@ -1,72 +1,101 @@
-# Rejection
+# Redux Boilerplate
 
-A student project for [Learn JavaScript with Eric Elliott](https://ericelliottjs.com).
+* [Here is the list of all examples](https://redux.js.org/introduction/examples)
 
-Want to work as a team?
+## Some rules
 
-You gotta lose to win.
+* Reducers must be pure functions [Source](https://medium.com/javascript-scene/10-tips-for-better-redux-architecture-69250425af44)
 
-Train yourself to:
+* Reducers should return a new object. You can do `Object.assign({}, state, {thingToChange})` or `{...obj, thingToChange}``
 
-* Get a raise
-* Sell more
-* Develop more business
-* Negotiate better deals
-
-The game has one rule:
-
-**You must be rejected by a human being at least once per day.**
-
-Ask for things outside your comfort zone, and you'll find yourself winning a lot more.
-
-Win = 1 point.
-Rejection = 10 points.
-
-How long can you make your rejection streak last?
-
-
-## Basic Level
-
-Build a UI that lets you keep track of your score. Include a text input for the ask, who you asked, and two buttons: "Accepted" or "Rejected". For asynchronous requests such as emails or messages, record the score at the time you get the answer, not at the time you ask.
-
-Use HTML+CSS and store a record of the data in `localStorage`.
-
-Your data structure can be a simple array of ask objects:
+* Array parameters are also references. Don't use `push(), pop(), shift(), unshift(), reverse(), splice() etc.`instead use `concat()` e.g. [Dan Abramov Explains](https://egghead.io/lessons/react-redux-avoiding-array-mutations-with-concat-slice-and-spread)
 
 ```js
-interface Question {
-  id: String           // id of the question so you can get/edit/remove by id
-  timestamp: Number,   // output from Date.now()
-  question: String,    // the ask
-  askee: String,       // person asked
-  status: String       // 'Accepted', 'Rejected', 'Unanswered'
-}
+const chatReducer = (state = defaultState, action = {}) => {
+  const { type, payload } = action;
+  switch (type) {
+    case ADD_CHAT:
+      return Object.assign({}, state, {
+        chatLog: state.chatLog.concat(payload)
+      });
+    default: return state;
+  }
+};
 ```
 
-You can calculate everything else you need to know by reducing over the list of asks.
+* Use constants for action types and better names instead of `CHANGE_MESSAGE`better `CHAT::CHANGE_MESSAGE`. 
 
-It may be useful to display a running tally of the user's current score. Just remember that the current day's subtotal needs to be recalculated each time an ask is accepted or rejected, so it will be useful to keep the list in an array that you can [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) with each new ask added by the user.
+* Use Actions creators to handle impure logic and all sorts of side-effects
+
+```js
+/ Action creators can be impure.
+export const addChat = ({
+  // cuid is safer than random uuids/v4 GUIDs
+  // see usecuid.org
+  id = cuid(),
+  msg = '',
+  user = 'Anonymous',
+  timeStamp = Date.now()
+} = {}) => ({
+  type: ADD_CHAT,
+  payload: { id, msg, user, timeStamp }
+});
+```
+> As you can see above, we’re using cuid to generate random ids for each chat message, and `Date.now()` to generate the time stamp. Both of those are impure operations which are not safe to run in the reducer — but it’s perfectly OK to run them in action creators.
+
+* Test your reducers. Also very good example by [Dan Abramov](https://egghead.io/lessons/react-redux-writing-a-counter-reducer-with-tests)
+
+```js
+describe('addChat()', ({ test }) => {
+  test('with no arguments', ({ same, end}) => {
+    const msg = 'should add default chat message';
+
+    const actual = pipe(
+      () => reducer(undefined, addChat()),
+      // make sure the id and timestamp are there,
+      // but we don't care about the values
+      state => {
+        const chat = state.chatLog[0];
+        chat.id = !!chat.id;
+        chat.timeStamp = !!chat.timeStamp;
+        return state;
+      }
+    )();
+
+    const expected = Object.assign(createState(), {
+      chatLog: [{
+        id: true,
+        user: 'Anonymous',
+        msg: '',
+        timeStamp: true
+      }]
+    });
+
+    same(actual, expected, msg);
+    end();
+  });
 
 
-## Mid level
+  test('with all arguments', ({ same, end}) => {
+    const msg = 'should add correct chat message';
 
-Add an API to store data using a web service and database. Track multiple users (which means you'll need to add user authentication). Hint: Redis, Mongo, or RethinkDB would be good database candidates. Social login such as Facebook or Twitter would be good login options (easier and more secure than username/password logins).
+    const actual = reducer(undefined, addChat({
+      id: 1,
+      user: '@JS_Cheerleader',
+      msg: 'Yay!',
+      timeStamp: 1472322852682
+    }));
+    const expected = Object.assign(createState(), {
+      chatLog: [{
+        id: 1,
+        user: '@JS_Cheerleader',
+        msg: 'Yay!',
+        timeStamp: 1472322852682
+      }]
+    });
 
-
-## Advanced level
-
-* Share your score and compete with your friends on Facebook.
-* For each user, keep a leaderboard from their circle of friends.
-
-## Extra credit
-
-* Add mobile apps by turning your web app into a [Progressive Web Application](https://medium.com/javascript-scene/why-native-apps-really-are-doomed-native-apps-are-doomed-pt-2-e035b43170e9).
-
-
-## To Implement:
-
-1. Fork this repo
-2. Implement your solution.
-3. Open an issue with a link to your fork.
-
-To get credit, you must [open an issue](https://github.com/learn-javascript-courses/rejection/issues/new?title=Challenge+completed+level:+basic/mid/advanced) with a link to your fork.
+    same(actual, expected, msg);
+    end();
+  });
+});
+```
