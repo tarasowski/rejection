@@ -8,7 +8,6 @@ const mapDispatchToProps = dispatch =>
     ({
         onclick: () =>
             dispatch(addQuestion())
-
     })
 
 export default connect(
