@@ -1,17 +1,25 @@
 import {getInputValueFromId} from '../utils/ref.js'
 export const ADD_QUESTION = 'ADD_QUESTION'
 export const SAVE_TO_LOCAL_STORAGE = 'SAVE_TO_LOCAL_STORAGE'
+export const INPUT_QUESTION = 'INPUT_QUESTION' 
+export const INPUT_ASKEE = 'INPUT_ASKEE'
 
-export const addQuestion = ({
-  question = getInputValueFromId('question'), 
-  askee = getInputValueFromId('askee')} = {}) =>
+export const addQuestion = state =>
 ({
   type: ADD_QUESTION,
-  question,
-  askee,
-  command: {
-    type: SAVE_TO_LOCAL_STORAGE,
-    question,
-    askee
-  } 
+  question: state.userInput.questionInput,
+  askee: state.userInput.askeeInput,
 })
+
+export const questionInput = value => 
+({
+  type: INPUT_QUESTION,
+  value
+})
+
+export const askeeInput = value =>
+({
+  type: INPUT_ASKEE,
+  value,
+})
+
