@@ -9,6 +9,9 @@ export const addQuestion = state =>
   type: ADD_QUESTION,
   question: state.userInput.questionInput,
   askee: state.userInput.askeeInput,
+  command: {
+    type: SAVE_TO_LOCAL_STORAGE
+  }
 })
 
 export const questionInput = value => 
@@ -22,4 +25,5 @@ export const askeeInput = value =>
   type: INPUT_ASKEE,
   value,
 })
+
 
