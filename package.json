@@ -1,11 +1,11 @@
 {
-  "name": "simplecounter",
+  "name": "rejection-app",
   "version": "1.0.0",
-  "description": "Simple Counter App",
+  "description": "Rejection App ~ Eric Elliot",
   "scripts": {
     "start": "webpack-dev-server --open",
     "test": "node -r esm ./src/**/*.test.js",
-    "watch": "node ./src/utils/watcher.js"
+    "watch": "watch 'npm test' src"
   },
   "author": "Dimitri Tarasowski",
   "license": "MIT",
@@ -26,10 +26,10 @@
     "virtual-dom": "^2.1.1",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.14"
-  },
-  "dependencies": {
+    "webpack-dev-server": "^3.1.14",
     "esm": "^3.2.4",
     "ramda-x": "^1.0.11"
+  },
+  "dependencies": {
   }
 }

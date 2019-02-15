@@ -1,8 +1,8 @@
-import {SAVE_TO_LOCAL_STORAGE} from '../add-question/reducers.js'
+import {ADD_QUESTION} from '../add-question/reducers.js'
 
-export const perform = dispatch => state => ({command}) => {
-  switch(command.type) {
-    case SAVE_TO_LOCAL_STORAGE:
+export const performIO = dispatch => state => action  => {
+  switch(action.type) {
+    case ADD_QUESTION:
     localStorage.setItem('questions',JSON.stringify(state.questions))
       break
     default:
