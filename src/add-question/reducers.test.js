@@ -1,5 +1,4 @@
-import {userInput, questions} from  '../../reducers/index.js'
-import {INPUT_QUESTION, ADD_QUESTION, INPUT_ASKEE} from '../../actions/index.js' 
+import {userInput, questions, INPUT_QUESTION, ADD_QUESTION, INPUT_ASKEE} from  './reducers.js'
 import {expect} from 'expect.equal'
 
 const testInputQuestion = before => action => after =>

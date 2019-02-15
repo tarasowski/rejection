@@ -1,6 +1,6 @@
-import { connect } from '../utils/connect'
-import { addQuestion, questionInput, askeeInput } from '../actions'
-import { AddQuestion } from '../components/AddQuestion'
+import { connect } from '../store/connect.js' 
+import { addQuestion, questionInput, askeeInput } from './reducers.js'
+import { AddQuestion } from './component.js'
 
 const mapStateToProps = state => state 
 

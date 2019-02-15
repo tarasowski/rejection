@@ -1,6 +1,6 @@
 import createElement from 'virtual-dom/create-element';
 import { diff, patch } from 'virtual-dom';
-import view from './containers/App'
+import view from './App.js'
 import { store } from './store/configureStore'
 import {perform} from './side-effects/index'
 

@@ -4,7 +4,7 @@
   "description": "Simple Counter App",
   "scripts": {
     "start": "webpack-dev-server --open",
-    "test": "rm -rf src/tests/build && babel --presets es2015 -d src/tests/build/actions src/actions && babel --presets es2015 -d src/tests/build/reducers src/reducers && babel --presets es2015 -d src/tests/build/utils src/utils && babel --presets es2015 -d src/tests/build/store src/store && node ./src/tests/reducers/*.test.js",
+    "test": "node -r esm ./src/**/*.test.js",
     "watch": "node ./src/utils/watcher.js"
   },
   "author": "Dimitri Tarasowski",

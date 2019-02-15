@@ -1,5 +1,5 @@
-import { combineReducers } from '../utils/combine-reducers'
-import {questions, userInput} from '../reducers/index'
+import { combineReducers } from './combine-reducers.js'
+import {questions, userInput} from '../add-question/reducers.js'
 
 export const store = combineReducers({
     questions: questions, // key = state field, value = reducer function

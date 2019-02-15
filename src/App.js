@@ -1,6 +1,6 @@
 import hh from 'hyperscript-helpers'
 import { h } from 'virtual-dom'
-import addQuestion from './AddQuestion'
+import addQuestion from './add-question/container.js'
 
 
 const { div, pre } = hh(h);

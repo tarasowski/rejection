@@ -1,4 +1,4 @@
-const {SAVE_TO_LOCAL_STORAGE} = require('../actions/index.js')
+import {SAVE_TO_LOCAL_STORAGE} from '../add-question/reducers.js'
 
 export const perform = dispatch => state => ({command}) => {
   switch(command.type) {
