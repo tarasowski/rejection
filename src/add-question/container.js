@@ -1,4 +1,4 @@
-import { connect } from '../store/connect.js' 
+import { connect } from '../connect.js' 
 import { addQuestion, questionInput, askeeInput } from './reducers.js'
 import { AddQuestion } from './component.js'
 
