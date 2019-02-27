@@ -1,10 +1,22 @@
 import {userInput, questions, INPUT_QUESTION, ADD_QUESTION, INPUT_ASKEE} from  './reducers.js'
 import {expect} from 'expect.equal'
 
-const testInputQuestion = before => action => after =>
-  expect(
-    userInput(before)(action)
-    ).toEqual(after, 'userInput() - INPUT_QUESTION -> should return a property questionInput')
+//RITE
+//Readable -> ok
+//Isolated / Integrated -> ok
+//Thorough -> not ok?
+//Explicit -> ok
+
+// 5 Qs:
+// Component under test
+// Behavior we're testing
+// Actual
+// Expected
+// Replication
+
+const testInputQuestion = actual => action => expected =>
+  expect(userInput(actual)(action))
+    .toEqual(expected, 'userInput() - INPUT_QUESTION -> should return a property questionInput')
 
 testInputQuestion({})
 ({
@@ -15,17 +27,22 @@ testInputQuestion({})
   questionInput: 'How to be a good man?' 
 }) 
 
-const testInputAskee = before => action => after =>
-  expect(
-    userInput(before)(action)
-    ).toEqual(after, 'userInput() - INPUT_ASKEE -> should return a property askeeInput')
+const testInputAskee = actual => action => expected =>
+  expect(userInput(actual)(action))
+    .toEqual(expected, 'userInput() - INPUT_ASKEE -> should return a property askeeInput')
 
-testInputAskee({})({type: INPUT_ASKEE, value: 'Seneca'})({askeeInput: 'Seneca'})
+testInputAskee({})
+({
+  type: INPUT_ASKEE, 
+  value: 'Seneca'
+})
+({
+  askeeInput: 'Seneca'
+})
 
-const testAddQuestionInput = before => action => after =>
-  expect(
-    userInput(before)(action)
-    ).toEqual(after, 'userInput() - ADD_QUESTION -> should clear all user inputs')
+const testAddQuestionInput = actual => action => expected =>
+  expect(userInput(actual)(action))
+    .toEqual(expected, 'userInput() - ADD_QUESTION -> should clear all user inputs')
 
 testAddQuestionInput({})
 ({
@@ -38,10 +55,9 @@ testAddQuestionInput({})
   questionInput: '',
 })
 
-const testAddQuestionState = before => action => after =>
-  expect(
-    questions(before)(action)
-    ).toEqual(after, 'question() - ADD_QUESTION -> should return an array with an object')
+const testAddQuestionState = actual => action => expected =>
+  expect(questions(actual)(action))
+    .toEqual(expected, 'question() - ADD_QUESTION -> should return an array with an object')
     
 testAddQuestionState([])
 ({
