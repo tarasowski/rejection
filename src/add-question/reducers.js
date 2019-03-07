@@ -4,11 +4,14 @@ export const SAVE_TO_LOCAL_STORAGE = 'SAVE_TO_LOCAL_STORAGE'
 export const INPUT_QUESTION = 'INPUT_QUESTION' 
 export const INPUT_ASKEE = 'INPUT_ASKEE'
 
-export const addQuestion = state =>
+export const addQuestion = ({question, askee, status}) =>
 ({
   type: ADD_QUESTION,
-  question: state.userInput.questionInput,
-  askee: state.userInput.askeeInput,
+  payload: {
+    question,
+    askee,
+    status
+  }
 })
 
 export const questionInput = value => 
@@ -38,14 +41,16 @@ const question = (state = {}) => action => {
     }
 }
 
-export const questions = (state = []) => action => {
+export const questionsReducer = Object.assign((state = [], action = {}) => {
     switch (action.type) {
         case ADD_QUESTION:
-            return [...state, question()(action)]
+            return [...state, payload]
         default:
             return state
     }
-}
+}, {
+  slice: 'questions'
+})
 
 
 export const userInput = (state = {}) => action => {
@@ -61,4 +66,6 @@ export const userInput = (state = {}) => action => {
 
   }
 }
+
+export const getScore = () => {}
 

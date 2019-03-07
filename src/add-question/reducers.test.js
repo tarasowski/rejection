@@ -1,72 +1,59 @@
-import {userInput, questions, INPUT_QUESTION, ADD_QUESTION, INPUT_ASKEE} from  './reducers.js'
-import {expect} from 'expect.equal'
+import { describe } from 'riteway';
+import { questionsReducer, addQuestion, getScore } from './reducers';
 
-//RITE
-//Readable -> ok
-//Isolated / Integrated -> ok
-//Thorough -> not ok?
-//Explicit -> ok
+describe('questionsReducer', async assert => {
+  {
+    assert({
+      given: 'no arguments',
+      should: 'return the valid default state',
+      actual: questionsReducer(),
+      expected: []
+    });
+  }
+});
 
-// 5 Qs:
-// Component under test
-// Behavior we're testing
-// Actual
-// Expected
-// Replication
+describe('addQuestion action creator', async assert => {
+  {
+    const question = {
+      askee: 'Boss',
+      question: 'May I have a raise?',
+      status: 'Rejected'
+    };
+    assert({
+      given: 'a question object',
+      should: 'add a question to state',
+      actual: questionsReducer(undefined, addQuestion(question)),
+      expected: [question]
+    });
+  }
+});
 
-const testInputQuestion = actual => action => expected =>
-  expect(userInput(actual)(action))
-    .toEqual(expected, 'userInput() - INPUT_QUESTION -> should return a property questionInput')
+describe('getScore selector', async assert => {
+  const initialState = questionsReducer();
+  const actions = [
+    addQuestion({
+      askee: 'Boss',
+      question: 'May I have a raise?',
+      status: 'Rejected'
+    }),
+    addQuestion({
+      askee: 'Boss',
+      question: 'May I have a raise?',
+      status: 'Rejected'
+    }),
+    addQuestion({
+      askee: 'Boss',
+      question: 'May I have a raise?',
+      status: 'Accepted'
+    }),
+  ];
+  const state = actions.reduce(questionReducer, initialState);
 
-testInputQuestion({})
-({
-  type: INPUT_QUESTION, 
-  value: 'How to be a good man?'
-})
-({ 
-  questionInput: 'How to be a good man?' 
-}) 
+  assert({
+    given: 'Some questions',
+    should: 'return the correct score',
+    actual: getScore({ questions: state }),
+    expected: 21
+  });
+});
 
-const testInputAskee = actual => action => expected =>
-  expect(userInput(actual)(action))
-    .toEqual(expected, 'userInput() - INPUT_ASKEE -> should return a property askeeInput')
-
-testInputAskee({})
-({
-  type: INPUT_ASKEE, 
-  value: 'Seneca'
-})
-({
-  askeeInput: 'Seneca'
-})
-
-const testAddQuestionInput = actual => action => expected =>
-  expect(userInput(actual)(action))
-    .toEqual(expected, 'userInput() - ADD_QUESTION -> should clear all user inputs')
-
-testAddQuestionInput({})
-({
-  type: ADD_QUESTION,
-  question: 'What is a virtue',
-  askee: 'Marc Aurelius'
-})    
-({
-  askeeInput: '',
-  questionInput: '',
-})
-
-const testAddQuestionState = actual => action => expected =>
-  expect(questions(actual)(action))
-    .toEqual(expected, 'question() - ADD_QUESTION -> should return an array with an object')
-    
-testAddQuestionState([])
-({
-  type: ADD_QUESTION,
-  question: 'Would you like to teach me stoic philosophy?',
-  askee: 'Zeno'
-})
-([{
-  question: 'Would you like to teach me stoic philosophy?',
-  askee: 'Zeno',
-  status: 'Rejected'
-}]) 
