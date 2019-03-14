@@ -28,18 +28,6 @@ export const askeeInput = value =>
 
 // *** Reducers *** //
 
-const question = (state = {}) => action => {
-    switch (action.type) {
-        case ADD_QUESTION:
-            return {
-                question: action.question,
-                askee: action.askee,
-                status: 'Rejected'
-            }
-        default:
-            return state
-    }
-}
 
 export const questionsReducer = Object.assign((state = [], action = {}) => {
     switch (action.type) {
@@ -67,5 +55,8 @@ export const userInput = (state = {}) => action => {
   }
 }
 
-export const getScore = () => {}
+export const getScore = ({questions}) =>
+  questions.reduce((a,v) => v.status === "Rejection"
+    ? (a + 10)
+    : (a + 1), 0)
 
